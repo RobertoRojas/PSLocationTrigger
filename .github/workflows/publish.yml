@@ -1,0 +1,22 @@
+name: Publish
+
+on:
+  create:
+    tags:
+      - "v[0-9]+[.][0-9]+[.][0-9]+"
+
+jobs:
+  publish:
+    runs-on: windows-2019
+    if: "github.ref -match '^refs\/tags\/v\\d+[.]\\d+[.]\\d+$'"
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup PowerShell
+      uses: actions/setup-powershell@v1
+      with:
+        powershell-version: '7.x'
+
+    - name: Publish module
+      run: pwsh -Command ".\publish.ps1 -NuGetApiKey '${{ secrets.PSGALLERY }}'"
