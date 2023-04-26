@@ -5,7 +5,7 @@ This module provide the function to execute scripts automatically when you enter
 You can download this source code and install the module into your _PSModulePath_, but is more simple use the **PowerShell Gallery** module:
 
 ```Powershell
-PS> Install-Module -Name PSLocationTrigger
+Install-Module -Name PSLocationTrigger
 ```
 
 You can manually enable and disable the module with these commands:
