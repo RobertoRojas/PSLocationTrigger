@@ -1,16 +1,34 @@
 $PSLocationTriggerFile = ".pstrigger.ps1";
-$DefultTriggerFileContent = @"
+$TriggerFileParameters = @"
 [CmdletBinding()]
 param (
     [switch]
     `$Entering
 );
+"@
+$TriggerFileComment = @"
+# This file is used by https://github.com/RobertoRojas/PSLocationTrigger
+"@;
+$TriggerFileContents = @{
+    Default = @"
+$TriggerFileParameters
 if (`$Entering) {
     Write-Host -Object `"Going into `$PSScriptRoot`";
 } else {
     Write-Host -Object `"Leaving `$PSScriptRoot`";
 }
+$TriggerFileComment
 "@;
+    PythonEnv = @"
+$TriggerFileParameters
+if (`$Entering) {
+    & "`$PSScriptRoot\.venv3\Scripts\activate.ps1";
+} else {
+    deactivate;
+}
+$TriggerFileComment
+"@;
+}
 <#
 .SYNOPSIS
     This function return the path of the trigger file. if exist into the current path or any parent of it if not return null.
@@ -122,6 +140,9 @@ function Set-LocationEvent {
 .PARAMETER Path
     Folder path to create the file.
 
+.PARAMETER Type
+    Select the type of the trigger file.
+
 .PARAMETER Force
     Overwrite the content of the file if it exists.
 
@@ -134,6 +155,12 @@ function New-PSLocationTriggerFile {
         [Alias("LiteralPath")]
         [string]
         $Path = ".\",
+        [ValidateSet(
+            "Default",
+            "PythonEnv"
+        )]
+        [string]
+        $Type = "Default",
         [switch]
         $Force
     );
@@ -142,7 +169,7 @@ function New-PSLocationTriggerFile {
         Write-Error -Message "The file[$File] already exists, use -Force to overwrite";
         return;
     }
-    Out-File -Encoding utf8 -FilePath $File -InputObject $DefultTriggerFileContent;
+    Out-File -Encoding utf8 -FilePath $File -InputObject $TriggerFileContents[$Type];
 }
 <#
 .SYNOPSIS

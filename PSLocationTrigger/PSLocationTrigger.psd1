@@ -1,6 +1,6 @@
 @{
     RootModule = "PSLocationTrigger.psm1";
-    ModuleVersion = "1.0.0";
+    ModuleVersion = "1.0.1";
     GUID = "48f01b7f-28bc-4852-81ac-bdfe229eeb46";
     Author = "Rojas, Roberto";
     Description = "This module helps you run a script when you enter or exit a folder"

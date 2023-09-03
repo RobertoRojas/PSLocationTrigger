@@ -21,10 +21,10 @@ You can also set enable as default with the follow command:
 
 ```Powershell
 @"
-if(!(New-Object Security.Principal.WindowsPrincipal `$([Security.Principal.WindowsIdentity]::GetCurrent())).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)) {
+if(!(New-Object Security.Principal.WindowsPrincipal `$([Security.Principal.WindowsIdentity]::GetCurrent())).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator) -and `$(`$null -ne `$(Get-Module -Name PSLocationTrigger))) {
     Enable-PSLocationTrigger
 }
-"@ | Out-File -Append -FilePath $PROFILE
+"@ | Out-File -Append -FilePath $PROFILE;
 ```
 **Note:** Remember, could be dangerous execute scripts automatically with administrator privileges. By default this command check it and if the shell have administrator privilages, it will not active it. But you can remove the if and activate the module don't matter the privilages.
 
@@ -66,4 +66,12 @@ C:\test\venv/Scripts\python.exe
 (venv) PS C:\test> cd ..
 PS C:\> $(Get-Command python).Source
 C:\Program Files\Python38\python.exe
+```
+
+## Trigger template creation
+
+In order to create an trigger template, you can use the follow command:
+
+```Powershell
+New-PSLocationTriggerFile -Type Default -Force;
 ```
