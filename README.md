@@ -21,8 +21,14 @@ You can also set enable as default with the follow command:
 
 ```Powershell
 @"
-if(!(New-Object Security.Principal.WindowsPrincipal `$([Security.Principal.WindowsIdentity]::GetCurrent())).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator) -and `$(`$null -ne `$(Get-Module -Name PSLocationTrigger))) {
-    Enable-PSLocationTrigger
+try {
+    import-Module -Name PSLocationTrigger;
+    if(!(New-Object Security.Principal.WindowsPrincipal `$([Security.Principal.WindowsIdentity]::GetCurrent())).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator) -and `$(`$null -ne `$(Get-Module -Name PSLocationTrigger))) {
+        Enable-PSLocationTrigger;
+    } 
+}
+catch {
+    Write-Verbose -Message "Cannot load the PSLocationTrigger";
 }
 "@ | Out-File -Append -FilePath $PROFILE;
 ```
